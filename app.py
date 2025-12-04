@@ -18,29 +18,20 @@ def verify():
 @app.route('/webhook', methods=['POST'])
 def receive_update():
     data = request.get_json(silent=True)
-    
+    if not data:
+        return "OK", 200
+
     try:
-        entry = data.get("entry", [])[0]
-        change = entry.get("changes", [])[0]
-
-        if change.get("field") == "messages":
-            event = change["value"]["messages"][9]
-            sender = event["from"]
-            text = event.get("text", "")
-
-            print(f"[DM RECEIVED] {sender}: {text}")
-
-            try:
-                requests.post(PI_ENDPOINT, json={
-                    "sender": sender,
-                    "text": text
-                    }, timeout=2)
-            except Exception as e:
-                print("Failed to forward to PI:", e)
+        for entry in data.get("entry",[]):
+            for change in entry.get("changes", []):
+                if change.get("field") == "messages":
+                    messages = change["value"].get("messages", [])
+                    for msg in messages:
+                        requests.post(PI_ENDPOINT, json=msg, timeout=2)
     except Exception as e:
-        print("Parse error:", e)
-
+        print("Err paring:", e)
     return "OK", 200
 
 if __name__ == "__main__":
-    app.run()
+    app.run(host=0.0.0.0, port=5000)
+
