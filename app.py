@@ -27,7 +27,7 @@ def receive_update():
             sender = event["from"]
             text = event.get("text", "")
 
-            print(f"{DM RECEIVED] {sender}: {text}")
+            print(f"[DM RECEIVED] {sender}: {text}")
 
             try:
                 requests.post(PI_ENDPOINT, json={
