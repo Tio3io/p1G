@@ -3,7 +3,7 @@ import os
 
 app = Flask("__name__")
 
-PI_ENDPOINT = "https://excrescently-ferrety-kimberlee.ngrok-free.dev/event"
+PI_ENDPOINT = "https://excrescently-ferrety-kimberlee.ngrok-free.dev"
 VERIFY_TOKEN = os.environ.get("VERIFY_TOKEN", "my_verify_token")
 
 @app.route('/webhook', methods=['GET'])
