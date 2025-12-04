@@ -27,7 +27,7 @@ def receive_update():
                 if change.get("field") == "messages":
                     messages = change["value"].get("messages", [])
                     for msg in messages:
-                        requests.post(PI_ENDPOINT, json=msg, timeout=10)
+                        requests.post(PI_ENDPOINT, json={"messages": [msg]}, timeout=10)
     except Exception as e:
         print("Err paring:", e)
     return "OK", 200
